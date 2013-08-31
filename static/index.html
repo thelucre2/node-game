@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body {
+			font-family: Arial, Verdana, sans-serif;
+			font-size: 12px;
+		}
+		a {
+			color:#c00;
+			text-decoration: none;
+		}
+		a:hover {
+			color:#f66;
+		}
+		#wrap {
+			width:1200px;
+			height:650px;
+			margin:20px auto;
+			position: relative;
+		}
+		#map {
+			width:950px;
+			height:650px;
+			border:1px #ccc solid;
+			position: absolute;
+			left:0; top: 0;
+		}
+		#menu {
+			width:240px;
+			height:650px;
+			border:1px #ccc solid;
+			position: absolute;
+			right:0; top: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<div id="map">
+
+		</div>
+		<div id="menu">
+			<p><a href="#" id="create">create...</a></p>
+			<p>
+				<a href="#" id="open">open...</a><br/>
+					<ul>
+						<li><a href="#">test.json</a></li>
+					</ul>
+			</p>
+			<p><a href="#" id="save">save</a></p>
+			<p>
+				<strong>currently open: </strong>none<br/>
+				<input type="text" value="title"/><br/>
+				<input type="text" value="width"/><br/>
+				<input type="text" value="height"/><br/>
+			</p>
+		</div>
+	</div>
+</body>
+</html>

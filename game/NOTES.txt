@@ -1,0 +1,88 @@
+
+
+
+Development 
+	Agile methodology 
+	Scrum team
+	Deliver functionality during each sprint
+	Architecting BRF+ rulesets 
+	Converting business requirements into software enhancements
+	Adobe forms integration and mapping from KOFAX OCR systems
+
+TILE EDITOR
+
+	index.html
+	Actions:
+		create
+			w x h
+			title
+			filename (takes title or other)
+			saves new json file (defaulted to all 0)
+		open
+			list of /levels/*.json
+		edit
+			only when level is open
+		save
+			saves (overwrites) json file with tile values
+
+	Map format:
+
+	{
+		'map' : {
+			'title'  : 'some title',
+			'width'  : 5,
+			'height' : 3,
+			'tiles': [ [ 0, 0, 0, 0, 0],
+					   [ 0, 0, 0, 0, 0],
+					   [ 0, 0, 0, 0, 0] ]
+		}
+	}
+
+what do i want from a nodejs blog?
+	- super fast install
+	- minimalist features / dependencies
+	- micro templating for views
+	- low database footprint (no sql?)
+	- portfolio project
+	- secure from injections / rest attacks
+	- to learn node.js better
+	- to compete with wordpress functions
+	- to build fast dynamic content sites 
+
+
+features
+	- pretty urls
+		/posts/
+		/post/id or slug
+		/page/id or slug
+		/user/posts
+		/user/
+		/admin/
+		/admin/settings/
+		/admin/users/
+		/admin/users/username
+		/admin/posts/
+		/admin/posts/id
+		/admin/pages/
+		/admin/pages/id
+	- content:
+		id
+		title
+		slug
+		date
+		status
+		WYSIWYG (later)
+	- users
+		salted passwords
+		session states
+		uname
+		email
+		password recovery
+
+dependencies
+	- node
+	- MySQL db connection
+	- Sequelize
+	- jQuery
+	- express
+	- bootstrap

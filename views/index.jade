@@ -1,0 +1,33 @@
+!!! 5
+html(lang='en')  
+	head  
+		title= title  
+		link(rel="stylesheet" type="text/css" href="css/main.css")
+		script
+			latestmap="!{latestmap}";
+	body!= body   
+		#wrap
+			#map
+				canvas(width="200" height="100")
+			#menu
+				p
+					a(href="#") create...
+				p
+					open
+					ul	
+						each item in maps
+							a(href="#") 
+								li= item
+				p
+					a(href="#") save...
+				p
+					strong open map: 
+					em none
+					input(type="text" value="title" disabled="disabled")
+					input(type="text" value="width" disabled="disabled")
+					input(type="text" value="height" disabled="disabled")
+				p 
+					strong tiles
+					#tiles
+						each item in maptiles
+							.tile(style="background:" + item + ";")
