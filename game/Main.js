@@ -1,5 +1,5 @@
 var settings = {
-	'width' : 40,
+	'width' : 25,
 	'height' : 15,
 	'tilesize' : 32,
 	'FPS': 30 
