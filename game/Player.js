@@ -31,7 +31,7 @@ Player.prototype.draw = function( ctx ) {
 Player.prototype.moveLeft = function( tiles, frame ) {
   pl.frameSince = frame;
 	pl.direction = Key.LEFT;
-	if(!tiles[pl.xpos - 1][pl.ypos] == 1)
+	//if(!tiles[pl.xpos - 1][pl.ypos] == 1)
 		pl.xpos--;
 	pl.setState(pl.STATE.MOVING);  
 };
@@ -39,26 +39,26 @@ Player.prototype.moveLeft = function( tiles, frame ) {
 Player.prototype.moveRight = function( tiles, frame ) {
 	pl.frameSince = frame;
 	pl.direction = Key.RIGHT;
-	if(!tiles[pl.xpos + 1][pl.ypos] == 1)
+	//if(!tiles[pl.xpos + 1][pl.ypos] == 1)
 		pl.xpos++;
 	pl.setState(pl.STATE.MOVING);  
 };
 
 Player.prototype.moveUp = function( tiles, frame ) {
-	if(!tiles[pl.xpos][pl.ypos - 1] == 1) {
+	//if(!tiles[pl.xpos][pl.ypos - 1] == 1) {
 	  pl.frameSince = frame;
 		pl.direction = Key.UP;
 			pl.ypos--;
 		pl.setState(pl.STATE.MOVING);
-	}
 };
 
 Player.prototype.moveDown = function( tiles, frame ) {
-	pl.frameSince = frame;
-	pl.direction = Key.DOWN;
-	if(!tiles[pl.xpos][pl.ypos + 1] == 1)
-		pl.ypos++;
-	pl.setState(pl.STATE.MOVING);  
+	//if(!tiles[pl.xpos][pl.ypos + 1] == 1) {
+		pl.frameSince = frame;
+		pl.direction = Key.DOWN;
+			pl.ypos++;
+		pl.setState(pl.STATE.MOVING);  
+
 };
 
 Player.prototype.update = function(tiles, frame) {
