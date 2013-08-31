@@ -16,6 +16,8 @@ fs.readFile('maps/test.json', 'utf8', function (err,data) {
 
 //set path to the views (template) directory
 app.set('views', __dirname + '/views');
+app.all(/^\/game$/, function(req, res) { res.redirect('/game/'); });
+app.use('/game/',express.static(__dirname+'/game'));
 app.use("/css", express.static(__dirname + '/css'));
 //handle GET requests on /
 app.get('/', function(req, res){
