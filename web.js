@@ -7,8 +7,6 @@ var app = express();
 
 var map;
 
-process.env.PORT = 8080;
-
 fs.readFile('maps/test.json', 'utf8', function (err,data) {
   if (err) {
     return console.log(err);
@@ -50,7 +48,10 @@ app.get('/maps/get/:map?', function(req, res, next){
 });
 
 //listen on localhost:3000
-app.listen(8080);
+var port = process.env.PORT || 3000;
+app.listen(port);
+wr('Server started at port ' + port);
+
 
 function wr( string ) {
 	console.log(string);
