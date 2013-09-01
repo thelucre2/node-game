@@ -26,44 +26,48 @@ Player.prototype.draw = function( ctx ) {
 
 
 Player.prototype.moveLeft = function( tiles, frame ) {
-  this.frameSince = frame;
-	this.direction = Key.LEFT;
-	//if(!tiles[this.xpos - 1][this.ypos] == 1)
-		this.xpos--;
-	socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
-	//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
-	this.setState(this.STATE.MOVING);  
+	if(this.xpos - 1 >= 0) {
+	  this.frameSince = frame;
+		this.direction = Key.LEFT;
+		//if(!tiles[this.xpos - 1][this.ypos] == 1)
+			this.xpos--;
+		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+		this.setState(this.STATE.MOVING);  
+	}
 };
 
 Player.prototype.moveRight = function( tiles, frame ) {
-	this.frameSince = frame;
-	this.direction = Key.RIGHT;
-	//if(!tiles[this.xpos + 1][this.ypos] == 1)
+	if(this.xpos + 2 < tiles[this.xpos].length) {
+		this.frameSince = frame;
+		this.direction = Key.RIGHT;
 		this.xpos++;
-	socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
-	//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
-	this.setState(this.STATE.MOVING);  
+		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+		this.setState(this.STATE.MOVING);
+	}  
 };
 
 Player.prototype.moveUp = function( tiles, frame ) {
-	//if(!tiles[this.xpos][this.ypos - 1] == 1) {
+	if(this.ypos - 1 >= 0) {
 	  this.frameSince = frame;
 		this.direction = Key.UP;
 			this.ypos--;
 		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
 		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
 		this.setState(this.STATE.MOVING);
+	}
 };
 
 Player.prototype.moveDown = function( tiles, frame ) {
-	//if(!tiles[this.xpos][this.ypos + 1] == 1) {
+	if(this.ypos + 2 < tiles[this.ypos].length) {
 		this.frameSince = frame;
 		this.direction = Key.DOWN;
 		this.ypos++;
 		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
 		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
 		this.setState(this.STATE.MOVING);  
-
+	}
 };
 
 Player.prototype.update = function(tiles, frame, localPlayer ) {
