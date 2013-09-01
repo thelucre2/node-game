@@ -51,6 +51,38 @@ app.get('/maps/get/:map?', function(req, res, next){
     fs.readFile(__dirname + '/maps/' + map, handler);
 });
 
+app.get('/fortune/:type?', function(req, res, next){
+    var fortuneType = req.params.type;
+    wr('Fortune type requested: ' + fortuneType);
+    var handler = function(error, content){
+	    if (error){
+	    	wr('Map load failed: ' + map);
+	      res.write(JSON.stringify({ "request" : "failed" }));
+	      res.end();
+	    }
+	    else{
+
+	    	var jsonFortunes = JSON.parse(content);
+	    	var yesnos = jsonFortunes.fortunes.yesnos;
+	    	var dailies = jsonFortunes.fortunes.dailies;
+	    	var secrets = jsonFortunes.fortunes.secrets;
+
+	    	switch(fortuneType.toLowerCase()) {
+	    		case 'daily':
+	    			res.write(JSON.stringify( dailies[Math.floor( Math.random() * dailies.length)] ));
+	    			break;
+	    		case 'yesno':
+	    			res.write(JSON.stringify( yesnos[Math.floor( Math.random() * yesnos.length)] ));
+	    			break;
+	    		case 'secret':
+	    			res.write(JSON.stringify( secrets[Math.floor( Math.random() * yesnos.length)] ));
+	    			break;
+	    	}
+	    	res.end();
+	    } 
+	  }
+    fs.readFile(__dirname + '/fortune/fortunes.json', handler);
+});
 
 /***********************************************
  * CHAT CODE
