@@ -105,3 +105,10 @@ function getPlayerById( id ) {
 	}
 	return null;
 }
+
+Map.prototype.removePlayer = function( id ) {
+	for(var player = 0; player < m.players.length; player++) {
+		if(m.players[player].id == id )
+			m.players.splice( player, 1 );
+	}
+};

@@ -26,10 +26,9 @@ var Game = function( settings ) {
 
 }
 
-Game.prototype.setupMainPlayer = function( playerid ) {
+Game.prototype.setupMainPlayer = function(  ) {
 	console.log('local player? :' +  $.cookie('player'));
 	if($.cookie('player') == '' || $.cookie('player') == undefined) {
-		console.log("CLIENT: Local player created - " + playerid);
 		playerID = util.randomColor();
 		ga.localPlayer = ga.map.addPlayer( { "id" : playerID, "color" : playerID });
 		ga.localPlayer.updatePlayerCookie( playerID, 0, 0, 0, 0 );

@@ -18,6 +18,15 @@ $(document).ready( function() {
 
 	loop();
 
+  $('#clear-char').on('click', function(e) {
+    game.map.removePlayer( $.cookie('player'));
+    $.cookie('x', '0');
+    $.cookie('y', '0');
+    $.cookie('xpos', '0');
+    $.cookie('ypos', '0');
+    game.setupMainPlayer();
+  });
+
 });
 
 function loop() {
