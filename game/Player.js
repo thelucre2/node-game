@@ -1,121 +1,154 @@
 
 var Player = function( name, color ) {
-	pl = this;
 
-	pl.STATE = {
+	this.STATE = {
 		'CANMOVE' : 0,
 		'MOVING' : 1,
 		'IMMOBILE' : 2
 	};
-	pl.frameSince = 0;
-	pl.size = 32;
-	pl.direction = Key.DOWN;
-	pl.state = pl.STATE.CANMOVE;
-	pl.name = name;
-	pl.color = color;
-	pl.x = 0;
-	pl.y = 0;
-	pl.xpos = 0;
-	pl.ypos = 0;
-	pl.speed = 10;
-	
+	this.id = name;
+	this.frameSince = 0;
+	this.size = 32;
+	this.direction = Key.DOWN;
+	this.state = this.STATE.CANMOVE;
+	this.color = color;
+	this.x = 0;
+	this.y = 0;
+	this.xpos = 0;
+	this.ypos = 0;
+	this.speed = 10;
 }
 
 Player.prototype.draw = function( ctx ) {
-	//console.log('drawing player, ' + pl.name );
-	ctx.fillStyle = pl.color;
-	ctx.fillRect(pl.x, pl.y,pl.size,pl.size);
+	ctx.fillStyle = this.color;
+	ctx.fillRect(this.x, this.y,this.size,this.size);
 };
 
 
 Player.prototype.moveLeft = function( tiles, frame ) {
-  pl.frameSince = frame;
-	pl.direction = Key.LEFT;
-	//if(!tiles[pl.xpos - 1][pl.ypos] == 1)
-		pl.xpos--;
-	pl.setState(pl.STATE.MOVING);  
+  this.frameSince = frame;
+	this.direction = Key.LEFT;
+	//if(!tiles[this.xpos - 1][this.ypos] == 1)
+		this.xpos--;
+	socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+	//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+	this.setState(this.STATE.MOVING);  
 };
 
 Player.prototype.moveRight = function( tiles, frame ) {
-	pl.frameSince = frame;
-	pl.direction = Key.RIGHT;
-	//if(!tiles[pl.xpos + 1][pl.ypos] == 1)
-		pl.xpos++;
-	pl.setState(pl.STATE.MOVING);  
+	this.frameSince = frame;
+	this.direction = Key.RIGHT;
+	//if(!tiles[this.xpos + 1][this.ypos] == 1)
+		this.xpos++;
+	socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+	//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+	this.setState(this.STATE.MOVING);  
 };
 
 Player.prototype.moveUp = function( tiles, frame ) {
-	//if(!tiles[pl.xpos][pl.ypos - 1] == 1) {
-	  pl.frameSince = frame;
-		pl.direction = Key.UP;
-			pl.ypos--;
-		pl.setState(pl.STATE.MOVING);
+	//if(!tiles[this.xpos][this.ypos - 1] == 1) {
+	  this.frameSince = frame;
+		this.direction = Key.UP;
+			this.ypos--;
+		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+		this.setState(this.STATE.MOVING);
 };
 
 Player.prototype.moveDown = function( tiles, frame ) {
-	//if(!tiles[pl.xpos][pl.ypos + 1] == 1) {
-		pl.frameSince = frame;
-		pl.direction = Key.DOWN;
-			pl.ypos++;
-		pl.setState(pl.STATE.MOVING);  
+	//if(!tiles[this.xpos][this.ypos + 1] == 1) {
+		this.frameSince = frame;
+		this.direction = Key.DOWN;
+		this.ypos++;
+		socket.emit('playerMove', { "player" : this.id, "direction" : this.direction });
+		//console.log("CLIENT: player moving emitted - " + this.id + ", " + this.direction);
+		this.setState(this.STATE.MOVING);  
 
 };
 
-Player.prototype.update = function(tiles, frame) {
-	
-	switch(pl.state) {
-		case pl.STATE.CANMOVE:
-		  if (Key.isDown(Key.UP)) { pl.moveUp(tiles, frame); break; }
-		  if (Key.isDown(Key.LEFT)) { pl.moveLeft(tiles, frame); break; }
-		  if (Key.isDown(Key.DOWN)) { pl.moveDown(tiles, frame); break; }
-		  if (Key.isDown(Key.RIGHT)) { pl.moveRight(tiles, frame); break; }
+Player.prototype.update = function(tiles, frame, localPlayer ) {
+	switch(this.state) {
+		case this.STATE.CANMOVE:
+			if(this.id == localPlayer) {
+			  if (Key.isDown(Key.UP)) { this.moveUp(tiles, frame); break; }
+			  if (Key.isDown(Key.LEFT)) { this.moveLeft(tiles, frame); break; }
+			  if (Key.isDown(Key.DOWN)) { this.moveDown(tiles, frame); break; }
+			  if (Key.isDown(Key.RIGHT)) { this.moveRight(tiles, frame); break; }
+			  this.updatePlayerCookie();
+			}
 		  break;
-		case pl.STATE.MOVING:
-			pl.animate(pl.direction);
+		case this.STATE.MOVING:
+			this.animate(this.direction);
 	  }
 };
 
 Player.prototype.animate = function( direction ) {
 	switch(direction) {
 		case Key.DOWN:
-			var movement = pl.size / pl.speed;
-	  	pl.y += movement;
-	  	if(frame > pl.frameSince + pl.speed || 
-	  		 pl.ypos * pl.size + pl.size <= pl.y + pl.size )  {
-	  		pl.setState(pl.STATE.CANMOVE);
-	  		pl.y = pl.ypos * pl.size;
+			var movement = this.size / this.speed;
+	  	this.y += movement;
+	  	if(frame > this.frameSince + this.speed || 
+	  		 this.ypos * this.size + this.size <= this.y + this.size )  {
+	  		this.setState(this.STATE.CANMOVE);
+	  		this.y = this.ypos * this.size;
 	  	}
 	  	break;
 	  case Key.UP:
-			var movement = pl.size / pl.speed;
-	  	pl.y -= movement;
-	  	if(frame > pl.frameSince + pl.speed || 
-	  		 pl.ypos * pl.size >= pl.y )  {
-	  		pl.setState(pl.STATE.CANMOVE);
-	  		pl.y = pl.ypos * pl.size;
+			var movement = this.size / this.speed;
+	  	this.y -= movement;
+	  	if(frame > this.frameSince + this.speed || 
+	  		 this.ypos * this.size >= this.y )  {
+	  		this.setState(this.STATE.CANMOVE);
+	  		this.y = this.ypos * this.size;
 	  	}
 	  	break;
 	  	case Key.RIGHT:
-			var movement = pl.size / pl.speed;
-	  	pl.x += movement;
-	  	if(frame > pl.frameSince + pl.speed || 
-	  		 pl.xpos * pl.size + pl.size <= pl.x + pl.size )  {
-	  		pl.setState(pl.STATE.CANMOVE);
-	  		pl.x = pl.xpos * pl.size;
+			var movement = this.size / this.speed;
+	  	this.x += movement;
+	  	if(frame > this.frameSince + this.speed || 
+	  		 this.xpos * this.size + this.size <= this.x + this.size )  {
+	  		this.setState(this.STATE.CANMOVE);
+	  		this.x = this.xpos * this.size;
 	  	}
 	  	break;
 	  case Key.LEFT:
-			var movement = pl.size / pl.speed;
-	  	pl.x -= movement;
-	  	if(frame > pl.frameSince + pl.speed || 
-	  		 pl.xpos * pl.size >= pl.x )  {
-	  		pl.setState(pl.STATE.CANMOVE);
-	  		pl.x = pl.xpos * pl.size;
+			var movement = this.size / this.speed;
+	  	this.x -= movement;
+	  	if(frame > this.frameSince + this.speed || 
+	  		 this.xpos * this.size >= this.x )  {
+	  		this.setState(this.STATE.CANMOVE);
+	  		this.x = this.xpos * this.size;
 	  	}
 	  	break;
 	}	
 };
 
 Player.prototype.setState = function( state ) {
-	pl.state = state;
+	this.state = state;
 };
+
+Player.prototype.getInfo = function() {
+	return { "id" : this.id,
+					 "color"  : this.color,
+					 "xpos"		: this.xpos,
+					 "ypos"   : this.ypos,
+					 "x"			: this.x,
+					 "y"			: this.y }
+}
+
+Player.prototype.setInfo = function( data ) {
+	this.x = data.x;
+	this.y = data.y;
+	this.xpos = data.xpos;
+	this.ypos = data.ypos;
+};
+
+Player.prototype.updatePlayerCookie = function() {
+	if(this.id == playerID) {
+		$.cookie('player', this.id);
+		$.cookie('x', this.x);
+		$.cookie('y', this.y);
+		$.cookie('xpos', this.xpos);
+		$.cookie('ypos', this.ypos);
+	}
+}

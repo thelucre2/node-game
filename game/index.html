@@ -7,6 +7,8 @@
 
 <script src='/socket.io/socket.io.js' type='text/javascript'></script>
 <script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="Util.js"></script>
+<script type="text/javascript" src="jquery.cookie.js"></script>
 <script type="text/javascript" src="Tile.js"></script>
 <script type="text/javascript" src="Tileset.js"></script>
 <script type="text/javascript" src="Map.js"></script>
@@ -23,7 +25,7 @@
 		<div id='room-list'></div>
 		<div id='messages'></div>
 		<form id='send-form'>
-			<input id='send-message' />
+			<input id='send-message' autocomplete="off" />
 			<input id='send-button' type='submit' value='Send'/>
 			<div id='help'>
 			Chat commands:

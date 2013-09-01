@@ -1,12 +1,15 @@
 var settings = {
-	'width' : 25,
-	'height' : 15,
+	'width' : 10,
+	'height' : 10,
 	'tilesize' : 32,
-	'FPS': 30 
+	'FPS': 20 
 }
 var Key;
 var game;
 var frame = 0; 
+var socket = io.connect();
+var util = new Util();
+var playerID;
 
 $(document).ready( function() {
 

@@ -23,10 +23,41 @@ function processUserInput(chatApp, socket) {
 	$('#send-message').val('');
 }
 
-var socket = io.connect();
-
 $(document).ready(function() {
 	var chatApp = new Chat(socket);
+
+	// GAMEPLAY //////////////////////////////////////////////////////
+
+	socket.on('playerMoved', function ( data ) {
+		// { player : id, direction: U/D/L/R }
+		//console.log(data);
+		//console.log('CLIENT: player moved - ' + data.player + " : " + data.direction);
+		game.movePlayer(data);
+	});
+
+	socket.on('playerCreated', function ( data ) {
+		// { player : id, direction: U/D/L/R }
+		console.log('CLIENT: player creating - ' + data.id);
+		game.addRemotePlayer(data);
+	});
+
+	socket.on('requestLocalPlayer', function ( data ) {
+		// { player : id, direction: U/D/L/R }
+		console.log('CLIENT: requested local player by - ' + data.requester);
+		var locPlayer = game.getLocalPlayer( data.requester );
+		if(locPlayer) {
+			socket.emit('sendLocalPlayer', { "requester" : data.requester, 
+																			 "player" : locPlayer.getInfo() });
+		}
+	});
+
+	socket.on('localPlayerSent', function ( playerData ) {
+		// { player : id, direction: U/D/L/R }
+		console.log('CLIENT: player creating - ' + playerData.id );
+		game.addRemotePlayer( playerData );
+	});
+
+	// CHAT //////////////////////////////////////////////////////////
 
 	socket.on('nameResult', function(result) {
 		var message;
@@ -66,7 +97,7 @@ $(document).ready(function() {
 
 	setInterval(function() {
 		socket.emit('rooms');
-	}, 1000);
+	}, 2000);
 	
 	$('#send-message').focus();
 	$('#send-form').submit(function() {

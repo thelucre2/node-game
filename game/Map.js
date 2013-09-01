@@ -36,14 +36,72 @@ Map.prototype.draw = function( ctx ) {
 	}
 };
 
-Map.prototype.addPlayer = function( name, color ) {
-	var p = new Player( name, color );
-	m.players.push(p);
-};
-
-Map.prototype.update = function( frame ) {
-	for(var player = 0; player < m.players.length; player++) {
-		m.players[player].update( m.tiles, frame );
+Map.prototype.addPlayer = function( playerData ) {
+	if(!checkIfPlayerExists(playerData.id)) {
+		var p = new Player( playerData.id, playerData.color );
+		if(playerData.ypos !== undefined && playerData.xpos !== undefined) {
+			p.ypos = playerData.ypos;
+			p.xpos = playerData.xpos;
+			p.x = playerData.x;
+			p.y = playerData.y;
+		}
+		console.log('CLIENT: Map player added - ' + playerData.id +' @ (' + p.xpos + ',' + p.ypos + ')');
+		socket.emit('playerCreate', p.getInfo());
+		m.players.push(p);
+		return p;
+	} else {
+		var player = getPlayerById( playerData.id );
+		player.setInfo( playerData);
+		return player;
 	}
 };
 
+Map.prototype.update = function( frame, localPlayer ) {
+	for(var player = 0; player < m.players.length; player++) {
+		m.players[player].update( m.tiles, frame, localPlayer );
+	}
+};
+
+Map.prototype.movePlayer = function(frame, data) {
+	var pid = data.player;
+	var direction = data.direction;
+	for(var player = 0; player < m.players.length; player++) {
+		if(pid == m.players[player].id && m.players[player].state == 0) {
+			switch(direction) {
+				case Key.UP:
+					m.players[player].moveUp(m.tiles, frame);
+					break;
+				case Key.DOWN:
+					m.players[player].moveDown(m.tiles, frame);
+					break;
+				case Key.LEFT:
+					m.players[player].moveLeft(m.tiles, frame);
+					break;
+				case Key.RIGHT:
+					m.players[player].moveRight(m.tiles, frame);
+					break;
+			}
+			break; // found our player, break out;
+		}
+	}
+};
+
+
+function checkIfPlayerExists( playerid ) {
+	if(ga.localPlayer) {
+		if(ga.localPlayer.id == playerid) return true;
+	}
+	for(var player = 0; player < m.players.length; player++) {
+		if(m.players[player].id != undefined && m.players[player].id == playerid )
+			return true;
+	}
+	return false;
+}
+
+function getPlayerById( id ) {
+	for(var player = 0; player < m.players.length; player++) {
+		if(m.players[player].id == id )
+			return m.players[player];
+	}
+	return null;
+}
