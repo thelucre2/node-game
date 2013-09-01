@@ -31,8 +31,8 @@ Game.prototype.setupMainPlayer = function( playerid ) {
 	if($.cookie('player') == '' || $.cookie('player') == undefined) {
 		console.log("CLIENT: Local player created - " + playerid);
 		playerID = util.randomColor();
-		ga.updatePlayerCookie( playerID, 0, 0, 0, 0 );
 		ga.localPlayer = ga.map.addPlayer( { "id" : playerID, "color" : playerID });
+		ga.localPlayer.updatePlayerCookie( playerID, 0, 0, 0, 0 );
 	} else {
 		playerID = $.cookie('player');
 		ga.localPlayer = ga.map.addPlayer( { "id" : playerID, 
